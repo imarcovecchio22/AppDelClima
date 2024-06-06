@@ -1,0 +1,10 @@
+package com.istea.appdelclima.presentacion.clima
+
+sealed class ClimaEstado {
+    data class Exitoso (val ciudad : String, val temperatura: Double, val descripcion: String, val st :Double)
+        : ClimaEstado()
+    data class Error(val mensaje :String = "", ) : ClimaEstado()
+    data object Vacio: ClimaEstado()
+    data object Cargando: ClimaEstado()
+
+}
