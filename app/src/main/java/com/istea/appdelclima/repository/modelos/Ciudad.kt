@@ -8,4 +8,5 @@ data class Ciudad(
     val lat: Double,
     val lon: Double,
     val state: String,
+    val country: String
 )

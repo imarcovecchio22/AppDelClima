@@ -8,15 +8,18 @@ class RepositorioMock  : Repositorio {
         val ciudad1 = Ciudad(name = "jojo",
             lat = -23.0,
             lon = -24.3,
-            state = "Argentina")
+            state = "Argentina",
+            country = "Arg")
         val ciudad2 =Ciudad(name = "jojo",
             lat = -23.0,
             lon = -24.3,
-            state = "Argentina")
+            state = "Argentina",
+            country = "Arg")
         val ciudad3 =Ciudad(name = "jojo",
             lat = -23.0,
             lon = -24.3,
-            state = "Argentina")
+            state = "Argentina",
+            country = "Arg")
         return listOf(ciudad1,ciudad2,ciudad3)
     }
 

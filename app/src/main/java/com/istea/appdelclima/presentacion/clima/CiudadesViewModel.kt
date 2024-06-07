@@ -27,12 +27,13 @@ class CiudadesViewModel(
     }
 
     var uiState by mutableStateOf<CiudadesEstado>(CiudadesEstado.Vacio)
-
+    var selectedCiudad by mutableStateOf<Ciudad?>(null)
 
     fun ejecutar(intencion: CiudadesIntencion) {
         when (intencion) {
             is CiudadesIntencion.BuscarCiudad -> buscarCiudad(intencion.nombre)
             CiudadesIntencion.BuscarPorGeolocalizacion -> buscarPorGeolocalizacion()
+            is CiudadesIntencion.SeleccionarCiudad -> seleccionarCiudad(intencion.ciudad)
         }
     }
 
@@ -66,5 +67,11 @@ class CiudadesViewModel(
                 uiState = CiudadesEstado.Error("Error al buscar por geolocalización")
             }
         }
+    }
+
+    private fun seleccionarCiudad(ciudad: Ciudad) {
+        selectedCiudad = ciudad
+        // Aquí deberías implementar la lógica para navegar a la vista de clima
+        // Por ejemplo, podrías actualizar otro estado que gestione la navegación
     }
 }

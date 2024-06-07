@@ -1,6 +1,7 @@
 package com.istea.appdelclima.presentacion.clima
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,9 +14,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,8 +29,8 @@ import com.istea.appdelclima.repository.modelos.Ciudad
 @Composable
 fun CiudadesView(
     modifier: Modifier = Modifier,
-    state : CiudadesEstado,
-    onAction: (CiudadesIntencion)->Unit
+    state: CiudadesEstado,
+    onAction: (CiudadesIntencion) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val textState = remember { mutableStateOf(TextFieldValue()) }
@@ -38,7 +41,6 @@ fun CiudadesView(
             .background(Color.LightGray)
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -48,7 +50,10 @@ fun CiudadesView(
             BasicTextField(
                 value = textState.value,
                 onValueChange = { textState.value = it },
-                modifier = Modifier.weight(1f).padding(end = 8.dp).background(Color.White)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
+                    .background(Color.White)
             )
 
             Button(onClick = { onAction(CiudadesIntencion.BuscarCiudad(textState.value.text)) }) {
@@ -56,7 +61,7 @@ fun CiudadesView(
             }
 
             Button(onClick = { onAction(CiudadesIntencion.BuscarPorGeolocalizacion) }) {
-                Text(text = "Geolocalización")
+                Text(text = "Geo")
             }
         }
 
@@ -64,7 +69,9 @@ fun CiudadesView(
 
         when (state) {
             is CiudadesEstado.Error -> ErrorViewC(mensaje = state.mensaje)
-            is CiudadesEstado.Exitoso -> CiudadesList(ciudades = state.ciudades)
+            is CiudadesEstado.Exitoso -> CiudadesList(ciudades = state.ciudades) { ciudad ->
+                onAction(CiudadesIntencion.SeleccionarCiudad(ciudad))
+            }
             CiudadesEstado.Vacio -> EmptyViewC()
             CiudadesEstado.Cargando -> LoadingView()
         }
@@ -87,10 +94,30 @@ fun LoadingView() {
 }
 
 @Composable
-fun CiudadesList(ciudades: List<Ciudad>) {
+fun CiudadesList(ciudades: List<Ciudad>, onCiudadSeleccionada: (Ciudad) -> Unit) {
+    var selectedCiudad by remember { mutableStateOf<Ciudad?>(null) }
+
     Column {
+        Text(
+            text = selectedCiudad?.let { "${it.name}, ${it.country}" } ?: "Selecciona una ciudad",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .background(Color.Blue)
+        )
         ciudades.forEach { ciudad ->
-            Text(text = ciudad.name, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = "${ciudad.name}, ${ciudad.country}",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable {
+                        selectedCiudad = ciudad
+                        onCiudadSeleccionada(ciudad)
+                    }
+            )
         }
     }
 }
