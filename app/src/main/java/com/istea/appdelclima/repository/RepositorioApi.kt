@@ -23,14 +23,14 @@ class RepositorioApi : Repositorio {
         }
     }
 
-    override suspend fun buscarCiudad(ciudad: String): List<Ciudad> {
+    override suspend fun buscarCiudad(ciudad: String): Array<Ciudad> {
         val respuesta = cliente.get("http://api.openweathermap.org/geo/1.0/direct"){
             parameter("q",ciudad)
             parameter("limit",5)
             parameter("appid",apiKey)
         }
         if (respuesta.status == HttpStatusCode.OK){
-            val ciudades = respuesta.body<List<Ciudad>>()
+            val ciudades = respuesta.body<Array<Ciudad>>()
             return ciudades
         }else{
             throw Exception()

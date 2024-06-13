@@ -45,11 +45,11 @@ fun ClimaView(
         Button(onClick = { onAction(ClimaIntencion.BorrarTodo) }) {
             Text(text = "Borrar todo")
         }
-        Button(onClick = { onAction(ClimaIntencion.MostrarDetalleClima) }) {
-            Text(text = "Mostrar Detalle Clima")
+        Button(onClick = { onAction(ClimaIntencion.MostrarCaba) }) {
+            Text(text = "Mostrar Caba")
         }
-        Button(onClick = { onAction(ClimaIntencion.MostrarGrafico) }) {
-            Text(text = "Mostrar Grafico")
+        Button(onClick = { onAction(ClimaIntencion.MostrarCordoba) }) {
+            Text(text = "Mostrar Cordoba")
         }
         Button(onClick = { onAction(ClimaIntencion.MostrarError) }) {
             Text(text = "Mostrar Error")
@@ -97,6 +97,6 @@ fun ClimaPreviewError() {
 @Composable
 fun ClimaPreviewExitoso() {
     AppDelClimaTheme {
-        ClimaView(state = ClimaEstado.Exitoso(ciudad = "Mendoza", temperatura = 0.0, descripcion = "asd", st = 2.2), onAction = {})
+        ClimaView(state = ClimaEstado.Exitoso(ciudad = "Mendoza", temperatura = 0.0), onAction = {})
     }
 }

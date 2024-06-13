@@ -7,8 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.istea.appdelclima.presentacion.clima.CiudadesPage
-import com.istea.appdelclima.presentacion.clima.ClimaPage
+import com.istea.appdelclima.presentacion.ciudades.CiudadesPage
 import com.istea.appdelclima.ui.theme.AppDelClimaTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,8 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CiudadesPage()
-                    //ClimaPage()
+                    MainPage()
                 }
             }
         }
