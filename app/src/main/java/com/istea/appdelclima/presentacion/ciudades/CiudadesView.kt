@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -65,34 +67,21 @@ fun CiudadesView(
         when (state) {
             CiudadesEstado.Cargando -> Text(text = "Cargando...", color = Color.White)
             is CiudadesEstado.Error -> Text(text = state.mensaje, color = Color.Red)
-            is CiudadesEstado.Resultado -> ListaDeCiudades(state.ciudades, { onAction(CiudadesIntencion.Seleccionar(it)) })
+            is CiudadesEstado.Resultado -> ListaDeCiudades(state.ciudades){
+                onAction(CiudadesIntencion.Seleccionar(it)) }
             CiudadesEstado.Vacio -> Text(text = "No hay resultados", color = Color.White)
-        }
-        Button(
-            onClick = { onAction(CiudadesIntencion.Seleccionar(0)) },
-            modifier = Modifier.align(Alignment.End),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
-            )
-        ) {
-            Text(text = "Siguiente")
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListaDeCiudades(ciudades: Array<Ciudad>, onSelect: (Int) -> Unit) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF121212)), // Fondo oscuro para la lista
-        contentPadding = PaddingValues(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        itemsIndexed(items = ciudades) { index, ciudad ->
-            CiudadItem(ciudad = ciudad, onSelect = { onSelect(index) })
-            Divider(color = Color.Gray, thickness = 1.dp)
+fun ListaDeCiudades(ciudades: List<Ciudad>, onSelect: (Ciudad)->Unit) {
+    LazyColumn {
+        items(items = ciudades) {
+            Card(onClick = { onSelect(it) }) {//TODO ese indice no debe ser 0 cambiar cuando tenga api
+                Text(text = it.name)
+            }
         }
     }
 }

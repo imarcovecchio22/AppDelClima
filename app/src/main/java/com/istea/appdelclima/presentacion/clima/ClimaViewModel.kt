@@ -5,54 +5,46 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.istea.appdelclima.presentacion.ciudades.CiudadesViewModel
 import com.istea.appdelclima.repository.Repositorio
+import com.istea.appdelclima.repository.RepositorioApi
 import com.istea.appdelclima.repository.modelos.Ciudad
+import com.istea.appdelclima.repository.modelos.Clima
 import com.istea.appdelclima.router.Router
 import kotlinx.coroutines.launch
 
 class ClimaViewModel(
     val respositorio: Repositorio,
-    val router: Router
+    val router: Router,
+    val lat : Float,
+    val lon : Float
 ) : ViewModel() {
 
     var uiState by mutableStateOf<ClimaEstado>(ClimaEstado.Vacio)
 
     fun ejecutar(intencion: ClimaIntencion){
         when(intencion){
-            ClimaIntencion.BorrarTodo -> borrarTodo()
-            ClimaIntencion.MostrarCaba -> mostrarCaba()
-            ClimaIntencion.MostrarCordoba -> mostrarCordoba()
-            ClimaIntencion.MostrarError -> mostrarError()
+            ClimaIntencion.actualizarClima -> traerClima()
         }
     }
 
-    private fun mostrarError(){
-        uiState = ClimaEstado.Error("este es un error de mentiras")
-    }
-
-    private fun borrarTodo(){
-        uiState = ClimaEstado.Vacio
-    }
-
-    private fun mostrarCaba(){
-
-    }
-
-    private fun mostrarCordoba(){
-        ClimaEstado.Cargando
+    fun traerClima() {
+        uiState = ClimaEstado.Cargando
         viewModelScope.launch {
-            val cordoba = Ciudad(name = "Cordoba", lat = -31.4135, lon = -64.18105, state = "Ar", country = "Arg")
             try{
-                val clima = respositorio.traerClima(cordoba)
-                ClimaEstado.Exitoso(
+                val clima = respositorio.traerClima(lat = lat, lon = lon)
+                uiState = ClimaEstado.Exitoso(
                     ciudad = clima.name ,
-                    temperatura = 10.0,//clima.main.temp,
-                    descripcion = "asd",//clima.weather.first().description,
-                    st = 10.2//clima.main.feelsLike,
+                    temperatura = clima.main.temp,
+                    descripcion = clima.weather.first().description,
+                    st = clima.main.feels_like,
                 )
-            } catch (exeption: Exception){
-                ClimaEstado.Error("jojo")
+            } catch (exception: Exception){
+                uiState = ClimaEstado.Error(exception.localizedMessage ?: "error desconocido")
             }
         }
     }
@@ -61,12 +53,14 @@ class ClimaViewModel(
 
 class ClimaViewModelFactory(
     private val repositorio: Repositorio,
-    private val router: Router
+    private val router: Router,
+    private val lat: Float,
+    private val lon: Float,
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ClimaViewModel::class.java)) {
-            return ClimaViewModel(repositorio,router) as T
+            return ClimaViewModel(repositorio,router,lat,lon) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
