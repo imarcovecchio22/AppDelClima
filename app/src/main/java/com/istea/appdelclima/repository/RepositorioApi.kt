@@ -52,6 +52,17 @@ class RepositorioApi : Repositorio {
     }
 
     override suspend fun traerPronostico(lat: Float, lon: Float): List<Clima> {
-        TODO("Not yet implemented")
+        val respuesta = cliente.get("https://api.openweathermap.org/data/2.5/forecast/daily"){
+            parameter("lat",lat)
+            parameter("lon",lon)
+            parameter("cnt", 5)
+            parameter("appid",apiKey)
+        }
+        if(respuesta.status == HttpStatusCode.OK){
+            val pronostico = respuesta.body<List<Clima>>()
+            return pronostico
+        }else{
+            throw Exception()
+        }
     }
 }
