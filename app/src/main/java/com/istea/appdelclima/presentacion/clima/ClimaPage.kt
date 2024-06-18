@@ -25,5 +25,6 @@ fun ClimaPage(
         onAction = { intencion ->
             viewModel.ejecutar(intencion)
         }
+
     )
 }
