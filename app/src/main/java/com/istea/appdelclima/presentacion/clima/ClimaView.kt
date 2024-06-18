@@ -44,8 +44,8 @@ fun ClimaView(
                 descripcion = state.descripcion,
                 st = state.st
             )
-            ClimaEstado.Vacio -> LoadingView()
-            ClimaEstado.Cargando -> EmptyView()
+            ClimaEstado.Vacio -> EmptyView()
+            ClimaEstado.Cargando -> LoadingView()
         }
         Spacer(modifier = Modifier.height(20.dp))
 
