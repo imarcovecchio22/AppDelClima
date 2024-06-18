@@ -47,6 +47,7 @@ class CiudadesViewModel(
         )
         router.navegar(ruta)
     }
+
 }
 
 

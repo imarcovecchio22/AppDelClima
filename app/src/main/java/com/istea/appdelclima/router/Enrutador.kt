@@ -17,4 +17,8 @@ class Enrutador(
             }
         }
     }
+
+    override fun back(){
+        navHostController.popBackStack()
+    }
 }

@@ -29,6 +29,7 @@ class ClimaViewModel(
     fun ejecutar(intencion: ClimaIntencion){
         when(intencion){
             ClimaIntencion.actualizarClima -> traerClima()
+            ClimaIntencion.volverAtras -> back()
         }
     }
 
@@ -47,6 +48,10 @@ class ClimaViewModel(
                 uiState = ClimaEstado.Error(exception.localizedMessage ?: "error desconocido")
             }
         }
+    }
+
+    fun back(){
+        router.back()
     }
 
 }

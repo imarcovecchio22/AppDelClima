@@ -4,6 +4,7 @@ import com.istea.appdelclima.repository.modelos.Ciudad
 
 interface Router {
     fun navegar(ruta: Ruta )
+    fun back()
 }
 
 sealed class Ruta(val id: String) {

@@ -50,7 +50,9 @@ fun ClimaView(
         Spacer(modifier = Modifier.height(20.dp))
 
 
-        Text(text = "Volver atrás")
+        Button(onClick = { onAction(ClimaIntencion.volverAtras) }) {
+            Text(text = "Volver atrás")
+        }
 
 
         Spacer(modifier = Modifier.height(100.dp))
