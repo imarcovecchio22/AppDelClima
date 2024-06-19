@@ -30,7 +30,6 @@ fun ClimaView(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color(0xFFBBDEFB))
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

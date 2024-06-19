@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -54,25 +55,12 @@ fun CiudadesView(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        TextField(
+        ReplySearchBar(
             value = value,
-            label = { Text(text = "Buscar por nombre", color = MaterialTheme.colorScheme.primary) },
             onValueChange = {
                 value = it
                 onAction(CiudadesIntencion.Buscar(value))
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            leadingIcon = {
-                Icon(Icons.Filled.Search, contentDescription = "Buscar", tint = MaterialTheme.colorScheme.primary)
-            },
-            colors = TextFieldDefaults.textFieldColors(
-                cursorColor = MaterialTheme.colorScheme.primary,
-                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
-
-            )
+            }
         )
         when (state) {
             CiudadesEstado.Cargando -> Text(text = "Cargando...", color = Color.Blue)
@@ -116,6 +104,39 @@ fun ListaDeCiudades(ciudades: List<Ciudad>, onSelect: (Ciudad)->Unit) {
             }
 
         }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReplySearchBar(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(MaterialTheme.colorScheme.background, CircleShape),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            Icons.Filled.Search,
+            contentDescription = "Search",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(start = 12.dp, end = 8.dp)
+        )
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                cursorColor = MaterialTheme.colorScheme.primary,
+                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
+            ),
+            placeholder = { Text("Buscar por nombre", color = MaterialTheme.colorScheme.primary) }
+        )
     }
 }
 

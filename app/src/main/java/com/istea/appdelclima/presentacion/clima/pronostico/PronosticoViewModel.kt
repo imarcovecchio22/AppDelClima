@@ -30,45 +30,17 @@ class PronosticoViewModel(
         uiState = PronosticoEstado.Cargando
         viewModelScope.launch {
             try{
-                val forecast2 = respositorio.traerPronostico(nombre).filter {
-                    //TODO agregar logica de filtrado
-                    it.dt_txt.contains("06:00:00") || it.dt_txt.contains("12:00:00") || it.dt_txt.contains("18:00:00")
-                    true
-                }
-                val forecast = listOf(
-                    ListForecast(
-                        dt = 1618317040,
-                        main = MainForecast(
-                            temp = 20.0,
-                            feels_like = 19.0,
-                            temp_min = 18.0,
-                            temp_max = 22.0,
-                            pressure = 1013,
-                            sea_level = 1013,
-                            grnd_level = 1000,
-                            humidity = 60,
-                            temp_kf = 1.5
-                        ),
-                        dt_txt = "2021-04-13 06:00:00"
-                    ),
-                    ListForecast(
-                        dt = 1618327040,
-                        main = MainForecast(
-                            temp = 22.0,
-                            feels_like = 21.0,
-                            temp_min = 19.0,
-                            temp_max = 24.0,
-                            pressure = 1014,
-                            sea_level = 1014,
-                            grnd_level = 1001,
-                            humidity = 55,
-                            temp_kf = 1.5
-                        ),
-                        dt_txt = "2021-04-13 12:00:00"
-                    )
-                )
-                println("Pronóstico cargado exitosamente: $forecast2")
-                uiState = PronosticoEstado.Exitoso(forecast2)
+                val forecasts = respositorio.traerPronostico(nombre)
+                    .filter { it.dt_txt.contains("12:00:00") } // Filtra por la hora deseada
+                    .groupBy { it.dt_txt.split(" ")[0] } // Agrupa por fecha (ignorando la hora)
+
+                // Ahora obtenemos solo un pronóstico por día (puedes elegir el primero, el último, etc.)
+                val filteredForecasts = forecasts.mapValues { (_, forecastsForDay) ->
+                    forecastsForDay.maxByOrNull { it.main.temp_max }!! // Pronóstico máximo del día
+                }.values.toList()
+
+                println("Pronóstico cargado exitosamente: $filteredForecasts")
+                uiState = PronosticoEstado.Exitoso(filteredForecasts)
             } catch (exception: Exception){
                 println("Error al cargar pronóstico: ${exception.localizedMessage}")
                 uiState = PronosticoEstado.Error(exception.localizedMessage ?: "error desconocido")
