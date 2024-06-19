@@ -119,18 +119,3 @@ fun ListaDeCiudades(ciudades: List<Ciudad>, onSelect: (Ciudad)->Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewCiudadesView() {
-    CiudadesView(
-        state = CiudadesEstado.Resultado(
-            listOf(
-                Ciudad("Buenos Aires", 22.2f,22.3f,null,"Argentina"),
-                Ciudad("Córdoba", 22.2f,22.3f,null,"Argentina"),
-                Ciudad("Montevideo", 22.2f,22.3f,null,"Uruguay"),
-                Ciudad("Santiago", 22.2f,22.3f,null,"Chile")
-            )
-        ),
-        onAction = {}
-    )
-}

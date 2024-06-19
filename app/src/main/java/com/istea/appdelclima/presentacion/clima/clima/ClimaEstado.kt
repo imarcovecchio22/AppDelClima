@@ -1,4 +1,4 @@
-package com.istea.appdelclima.presentacion.clima
+package com.istea.appdelclima.presentacion.clima.clima
 
 sealed class ClimaEstado {
     data class Exitoso (

@@ -1,4 +1,4 @@
-package com.istea.appdelclima.presentacion.clima
+package com.istea.appdelclima.presentacion.clima.clima
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,11 +30,9 @@ fun ClimaView(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .fillMaxHeight()
             .background(Color(0xFFBBDEFB))
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ) {
         when (state) {
             is ClimaEstado.Error -> ErrorView(mensaje = state.mensaje)
@@ -48,14 +46,6 @@ fun ClimaView(
             ClimaEstado.Cargando -> LoadingView()
         }
         Spacer(modifier = Modifier.height(20.dp))
-
-
-        Button(onClick = { onAction(ClimaIntencion.volverAtras) }) {
-            Text(text = "Volver atrás")
-        }
-
-
-        Spacer(modifier = Modifier.height(100.dp))
 
     }
 }
